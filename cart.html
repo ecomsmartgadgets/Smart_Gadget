@@ -17,7 +17,6 @@
     <!-- Animate On Scroll -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
-
     <!-- Custom StyleSheet -->
     <link rel="stylesheet" href="styles.css" />
 
@@ -125,7 +124,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
+                                    <!-- Product 1 -->
+                                    <tr data-price="800.00">
                                         <td class="product__thumbnail">
                                             <a href="product.html">
                                                 <img src="./images/products/iPhone/iphone6.jpeg" alt="">
@@ -169,7 +169,9 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr>
+
+                                    <!-- Product 2 -->
+                                    <tr data-price="1000.00">
                                         <td class="product__thumbnail">
                                             <a href="#">
                                                 <img src="./images/products/sumsung/samsung5.jpeg" alt="">
@@ -213,7 +215,9 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr>
+
+                                    <!-- Product 3 -->
+                                    <tr data-price="900.00">
                                         <td class="product__thumbnail">
                                             <a href="product.html">
                                                 <img src="./images/products/sumsung/samsung2.jpeg" alt="">
@@ -257,7 +261,9 @@
                                             </a>
                                         </td>
                                     </tr>
-                                    <tr>
+
+                                    <!-- Product 4 -->
+                                    <tr data-price="850.99">
                                         <td class="product__thumbnail">
                                             <a href="product.html">
                                                 <img src="./images/products/iPhone/iphone4.jpeg" alt="">
@@ -455,13 +461,11 @@
 
             </div>
         </div>
-        </div>
     </footer>
 
     <!-- End Footer -->
 
     <!-- Go To -->
-
     <a href="#header" class="goto-top scroll-link">
         <svg>
             <use xlink:href="./images/sprite.svg#icon-arrow-up"></use>
@@ -475,9 +479,54 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <!-- Custom JavaScript -->
-    <script src="/js/products.js"></script>
-    <script src="/js/index.js"></script>
-    <script src="/js/slider.js"></script>
+    <script>
+        // Function to update the quantity and total price
+        const updateQuantityAndTotal = (input, priceElement, price) => {
+            const quantity = parseInt(input.value); // Get the current quantity
+            const totalPrice = quantity * price; // Calculate the total price
+            priceElement.textContent = `$${totalPrice.toFixed(2)}`; // Update the total price
+        };
+
+        // Add event listeners to all plus and minus buttons
+        document.querySelectorAll(".input-counter").forEach((counter) => {
+            const input = counter.querySelector(".counter-btn"); // Quantity input
+            const plusBtn = counter.querySelector(".plus-btn"); // Plus button
+            const minusBtn = counter.querySelector(".minus-btn"); // Minus button
+            const priceElement = counter.closest("tr").querySelector(".product__subtotal .new__price"); // Total price element
+            const price = parseFloat(counter.closest("tr").getAttribute("data-price")); // Get the product price
+
+            // Plus button click event
+            plusBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                let quantity = parseInt(input.value);
+                if (quantity < 10) {
+                    quantity += 1; // Increase quantity
+                    input.value = quantity; // Update the input value
+                    updateQuantityAndTotal(input, priceElement, price); // Update the total price
+                }
+            });
+
+            // Minus button click event
+            minusBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                let quantity = parseInt(input.value);
+                if (quantity > 1) {
+                    quantity -= 1; // Decrease quantity
+                    input.value = quantity; // Update the input value
+                    updateQuantityAndTotal(input, priceElement, price); // Update the total price
+                }
+            });
+
+            // Input change event (manual input)
+            input.addEventListener("change", () => {
+                let quantity = parseInt(input.value);
+                if (quantity < 1) quantity = 1; // Ensure quantity is at least 1
+                if (quantity > 10) quantity = 10; // Ensure quantity does not exceed 10
+                input.value = quantity; // Update the input value
+                updateQuantityAndTotal(input, priceElement, price); // Update the total price
+            });
+        });
+    </script>
 </body>
 
 </html>
