@@ -1,140 +1,62 @@
+// Import Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
 
+// Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyAUf4vFWBHFTEknmbaeu81fjVKznRH5h7E",
-    authDomain: "ecommerce12-e9380.firebaseapp.com",
-    projectId: "ecommerce12-e9380",
-    storageBucket: "ecommerce12-e9380.appspot.com",
-    messagingSenderId: "462427444830",
-    appId: "1:462427444830:web:4196b5902ece27daff46cf",
-    measurementId: "G-0QN0JK7ZYT"
+  apiKey: "AIzaSyD5soHZ8xka6ebNJG5obmGVPjP5KEx5PxE",
+  authDomain: "smart-gadget-7cf52.firebaseapp.com",
+  projectId: "smart-gadget-7cf52",
+  storageBucket: "smart-gadget-7cf52.appspot.com",
+  messagingSenderId: "417332385631",
+  appId: "1:417332385631:web:38aa5289b1d2dfc06308ea",
+  measurementId: "G-C74RB4HFY7"
 };
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app); // Initialize authentication
 
-$(".message a").click(function () {
-    $("form").animate({
-        height: "toggle",
-        opacity: "toggle"
-    }, "slow")
-})
+// ✅ Handle Signup Form
+document.getElementById("register-form").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent form submission
 
-const FName = document.getElementById("fname")
-const LName = document.getElementById("lname")
-const Phone = document.getElementById("phone")
-const Address = document.getElementById("address")
-const Email = document.getElementById("email")
-const Pass = document.getElementById("password")
-const CPass = document.getElementById("cpassword")
+    // Get input values
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-const FNameError = document.getElementById("error1")
-const LNameError = document.getElementById("error2")
-const PhoneError = document.getElementById("error3")
-const AddressError = document.getElementById("error4")
-const EmailError = document.getElementById("error5")
-const PassError = document.getElementById("error6")
-const CPassError = document.getElementById("error7")
+    // Firebase Signup
+    createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            alert("Signup successful! ✅");
+            console.log("User signed up:", userCredential.user);
+            window.location.href = "index.html"; // Redirect to index.html after signup
+        })
+        .catch((error) => {
+            alert("Signup failed ❌: " + error.message);
+            console.error("Error:", error);
+        });
+});
 
-const Strength = document.getElementById("strength")
-const RegisterForm = document.getElementById("register-form")
+// ✅ Handle Login Form
+document.querySelector(".login-form").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent form submission
 
-const indicator = document.querySelector(".indicator");
-const input = document.getElementById("password")
-const weak = document.querySelector(".weak");
-const medium = document.querySelector(".medium");
-const strong = document.querySelector(".strong");
-const text = document.querySelector(".strength");
+    // Get input values
+    const email = document.querySelector(".login-form input[placeholder='Email']").value;
+    const password = document.querySelector(".login-form input[placeholder='Password']").value;
 
-let regExpWeak = /[a-zA-Z]+/;
-let regExpMedium = /\d+/;
-let regExpStrong = /[!@#$%^&*?_~(),-]+/;
-
-function trigger() {
-    let no;
-    if (input.value !== "") {
-        indicator.style.display = "block";
-        indicator.style.display = "flex";
-        if (input.value.length <= 3 && (input.value.match(regExpWeak) || input.value.match(regExpMedium) || input.value.match(regExpStrong))) no = 1;
-        if (input.value.length >= 6 && ((input.value.match(regExpWeak) && input.value.match(regExpMedium)) || (input.value.match(regExpMedium) && input.value.match(regExpStrong)) || (input.value.match(regExpWeak) && input.value.match(regExpStrong)))) no = 2;
-        if (input.value.length >= 6 && input.value.match(regExpWeak) && input.value.match(regExpMedium) && input.value.match(regExpStrong)) no = 3;
-        if (no === 1) {
-            weak.classList.add("active");
-            text.style.display = "block";
-            text.textContent = "Your password is too week";
-            text.classList.add("weak");
-        }
-        if (no === 2) {
-            medium.classList.add("active");
-            text.textContent = "Your password is medium";
-            text.classList.add("medium");
-        } else {
-            medium.classList.remove("active");
-            text.classList.remove("medium");
-        }
-        if (no === 3) {
-            weak.classList.add("active");
-            medium.classList.add("active");
-            strong.classList.add("active");
-            text.textContent = "Your password is strong";
-            text.classList.add("strong");
-        } else {
-            strong.classList.remove("active");
-            text.classList.remove("strong");
-        }
-    } else {
-        indicator.style.display = "none";
-        text.style.display = "none";
-    }
-}
-
-function validateEmail(emailText) {
-    const re = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    return re.test(String(emailText).toLowerCase());
-}
-
-function validatePhone(phoneText) {
-    const re = /^[\d\.\-]+$/;
-    return re.test(String(phoneText));
-}
-
-function validateName(nameText) {
-    const re = /^[a-zA-Z]*$/;
-    return re.test(String(nameText));
-}
-
-Pass.addEventListener('change', () => {
-    console.log("Yo")
-})
-
-RegisterForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-    FNameError.innerHTML = ""
-    LNameError.innerHTML = ""
-    PhoneError.innerHTML = ""
-    AddressError.innerHTML = ""
-    EmailError.innerHTML = ""
-    PassError.innerHTML = ""
-    CPassError.innerHTML = ""
-
-    if (!validateName(FName.value)) {
-        FNameError.innerText = "Please enter a valid first name."
-    }
-
-    if (!validateName(LName.value)) {
-        LNameError.innerText = "Please enter a valid last name."
-    }
-
-    if (!validatePhone(Phone.value)) {
-        PhoneError.innerText = "Please enter a valid phone number."
-    }
-
-    if (!validateEmail(Email.value)) {
-        EmailError.innerText = "Please enter a valid email."
-    }
-
-    if (Pass.value.length < 8) {
-        PassError.innerHTML = "Password must be at least 8 digits."
-    } else if (Pass.value !== CPass.value) {
-        CPassError.innerHTML = "Password is not matching."
-        Pass.value = ""
-        CPass.value = ""
-    }
-})
+    // Firebase Login
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            alert("Login successful! ✅");
+            console.log("User logged in:", userCredential.user);
+            window.location.href = "index.html"; // Redirect to index.html after login
+        })
+        .catch((error) => {
+            alert("Login failed ❌: " + error.message);
+            console.error("Error:", error);
+        });
+});
