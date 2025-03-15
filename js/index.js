@@ -2,7 +2,7 @@
 =============
 Navigation
 =============
- */
+*/
 const navOpen = document.querySelector(".nav__hamburger");
 const navClose = document.querySelector(".close__toggle");
 const menu = document.querySelector(".nav__menu");
@@ -27,7 +27,7 @@ navClose.addEventListener("click", () => {
 =============
 PopUp
 =============
- */
+*/
 const popup = document.querySelector(".popup");
 const closePopup = document.querySelector(".popup__close");
 
@@ -47,14 +47,13 @@ if (popup) {
 =============
 Fixed Navigation
 =============
- */
-
+*/
 const navBar = document.querySelector(".navigation");
 const gotoTop = document.querySelector(".goto-top");
 
 // Smooth Scroll
-Array.from(scrollLink).map(link => {
-  link.addEventListener("click", e => {
+Array.from(scrollLink).map((link) => {
+  link.addEventListener("click", (e) => {
     // Prevent Default
     e.preventDefault();
 
@@ -78,8 +77,7 @@ Array.from(scrollLink).map(link => {
 });
 
 // Fix NavBar
-
-window.addEventListener("scroll", e => {
+window.addEventListener("scroll", (e) => {
   const scrollHeight = window.pageYOffset;
   const navHeight = navBar.getBoundingClientRect().height;
   if (scrollHeight > navHeight) {
@@ -92,5 +90,50 @@ window.addEventListener("scroll", e => {
     gotoTop.classList.add("show-top");
   } else {
     gotoTop.classList.remove("show-top");
+  }
+});
+
+/*
+=============
+Add to Cart Functionality
+=============
+*/
+// Initialize cart total
+let cartTotal = 0;
+
+// Function to update the cart total displayed in the icon
+function updateCartTotal() {
+  const cartTotalElement = document.getElementById("cart__total");
+  cartTotalElement.textContent = cartTotal;
+}
+
+// Add event listeners to all "Add to Cart" buttons
+document.querySelectorAll(".product__btn").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    // Increment the cart total
+    cartTotal += 1;
+
+    // Update the cart total displayed in the icon
+    updateCartTotal();
+
+    // Optionally, store the cart data in localStorage
+    localStorage.setItem("cartTotal", cartTotal);
+
+    // Optional: Add the product to the cart (you can expand this logic)
+    // const product = button.closest(".product");
+    // const productName = product.querySelector("h3").textContent;
+    // const productPrice = product.querySelector(".product__price h4").textContent;
+    // console.log(`Added ${productName} (${productPrice}) to cart.`);
+  });
+});
+
+// On page load, retrieve the cart total from localStorage (if it exists)
+window.addEventListener("load", () => {
+  const storedCartTotal = localStorage.getItem("cartTotal");
+  if (storedCartTotal) {
+    cartTotal = parseInt(storedCartTotal, 10);
+    updateCartTotal();
   }
 });
