@@ -1102,6 +1102,83 @@ Pop Up
   height: 100%;
   vertical-align: middle;
 }
+/* Team Section Styling */
+.team__content {
+    margin-top: 50px;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.team__content h2 {
+    font-size: 22px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.team__content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.team__content ul li {
+    font-size: 16px;
+    color: #555;
+    margin: 8px 0;
+    font-weight: 500;
+}
+
+.team__content ul li strong {
+    color: #222;
+    font-weight: 600;
+}
+
+#subscribeBtn {
+  background-color: black; /* Match the site’s dark button style */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+#signUpBtn {
+  background-color: black; /* Match the site’s dark button style */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+#green {
+color: #E2A705;
+}
+#gold{
+color: #E2A705;
+}
+#signUpBtn:hover {
+  background-color: #E2A705; /* Red hover effect */
+  color: white;
+  transform: scale(1.05);
+}
+
+#subscribeBtn:hover {
+  background-color: #E2A705; /* Red hover effect */
+  color: white;
+  transform: scale(1.05);
+}
+
 
 .popup__right {
   display: table-cell;
