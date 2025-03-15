@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Login and Registration Form</title>
+    <link rel="stylesheet" href="signup.css">
+    <script defer src="signup.js"></script>
+</head>
+<body>
+<div class="parent-div">
+    <section class="header-section">
+    </section>
+    <div class="vertical-section-holder">
+        <section class="vertical-section-1"></section>
+        <section class="vertical-section-2">
+            <div class="login-signup-holder">
+                <div class="forms">
+                    <form class="login-form">
+                        <h2 class="heading-text">Login</h2>
+                        <input type="text" placeholder="Email"/>
+                        <input type="text" placeholder="Password"/>
+                        <button type="submit">Login</button>
+                        <p class="message">Not registered? <a href="#">Signup</a></p>
+                    </form>
+                    <form class="register-form" id="register-form">
+                        <h2 class="heading-text">Sign Up</h2>
+                        <input type="text" id="fname" placeholder="Name" required/>
+                        <p class="errors" id="error1"></p>
+                        <input type="email" id="email" placeholder="Email" required/>
+                        <p class="errors" id="error5"></p>
+                        <input onkeyup="trigger()" type="password" id="password" placeholder="Password" required/>
+                        <p class="errors" id="error6"></p>
+                        <div class="indicator"><span class="weak"></span> <span class="medium"></span> <span
+                                class="strong"></span></div>
+                        <div class="strength"></div>
+                        <input type="password" id="cpassword" placeholder="Confirm Password" required/>
+                        <p class="errors" id="error7"></p>
+                        <button type="submit"> Signup</button>
+                        <p class="message">Already registered? <a href="#">Login</a></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="footer">
+        <p>Designed by <b> Kareithi </b> with ❤ </p>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js">
+</script>
+</body>
+</html>

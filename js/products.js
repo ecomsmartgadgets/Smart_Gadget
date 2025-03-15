@@ -13,17 +13,18 @@ const getProducts = async () => {
 =============
 Load Category Products
 =============
- */
+*/
 const categoryCenter = document.querySelector(".category__center");
 
 window.addEventListener("DOMContentLoaded", async function () {
   const products = await getProducts();
   displayProductItems(products);
+  addToCartEventListeners(); // Add event listeners for "Add to Cart" buttons
 });
 
-const displayProductItems = items => {
+const displayProductItems = (items) => {
   let displayProduct = items.map(
-    product => ` 
+    (product) => ` 
                   <div class="product category__products">
                     <div class="product__header">
                       <img src=${product.image} alt="product">
@@ -52,7 +53,7 @@ const displayProductItems = items => {
                       </div>
                       <a href="#"><button type="submit" class="product__btn">Add To Cart</button></a>
                     </div>
-                  <ul>
+                    <ul>
                       <li>
                         <a data-tip="Quick View" data-place="left" href="#">
                           <svg>
@@ -74,7 +75,7 @@ const displayProductItems = items => {
                           </svg>
                         </a>
                       </li>
-                  </ul>
+                    </ul>
                   </div>
                   `
   );
@@ -87,15 +88,60 @@ const displayProductItems = items => {
 
 /*
 =============
+Add to Cart Functionality
+=============
+*/
+let cartTotal = 0;
+
+// Function to update the cart total displayed in the icon
+function updateCartTotal() {
+  const cartTotalElement = document.getElementById("cart__total");
+  cartTotalElement.textContent = cartTotal;
+}
+
+// Add event listeners to all "Add to Cart" buttons
+function addToCartEventListeners() {
+  document.querySelectorAll(".product__btn").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault(); // Prevent the default form submission behavior
+
+      // Increment the cart total
+      cartTotal += 1;
+
+      // Update the cart total displayed in the icon
+      updateCartTotal();
+
+      // Optionally, store the cart data in localStorage
+      localStorage.setItem("cartTotal", cartTotal);
+
+      // Optional: Add the product to the cart (you can expand this logic)
+      const product = button.closest(".product");
+      const productName = product.querySelector("h3").textContent;
+      const productPrice = product.querySelector(".product__price h4").textContent;
+      console.log(`Added ${productName} (${productPrice}) to cart.`);
+    });
+  });
+}
+
+// On page load, retrieve the cart total from localStorage (if it exists)
+window.addEventListener("load", () => {
+  const storedCartTotal = localStorage.getItem("cartTotal");
+  if (storedCartTotal) {
+    cartTotal = parseInt(storedCartTotal, 10);
+    updateCartTotal();
+  }
+});
+
+/*
+=============
 Filtering
 =============
- */
-
+*/
 const filterBtn = document.querySelectorAll(".filter-btn");
 const categoryContainer = document.getElementById("category");
 
 if (categoryContainer) {
-  categoryContainer.addEventListener("click", async e => {
+  categoryContainer.addEventListener("click", async (e) => {
     const target = e.target.closest(".section__title");
     if (!target) return;
 
@@ -104,13 +150,13 @@ if (categoryContainer) {
 
     if (id) {
       // remove active from buttons
-      Array.from(filterBtn).forEach(btn => {
+      Array.from(filterBtn).forEach((btn) => {
         btn.classList.remove("active");
       });
       target.classList.add("active");
 
       // Load Products
-      let menuCategory = products.filter(product => {
+      let menuCategory = products.filter((product) => {
         if (product.category === id) {
           return product;
         }
@@ -121,6 +167,9 @@ if (categoryContainer) {
       } else {
         displayProductItems(menuCategory);
       }
+
+      // Reattach event listeners after filtering
+      addToCartEventListeners();
     }
   });
 }
@@ -129,7 +178,7 @@ if (categoryContainer) {
 =============
 Product Details Left
 =============
- */
+*/
 const pic1 = document.getElementById("pic1");
 const pic2 = document.getElementById("pic2");
 const pic3 = document.getElementById("pic3");
@@ -145,9 +194,9 @@ const picList = [pic1, pic2, pic3, pic4, pic5];
 // Active Picture
 let picActive = 1;
 
-["mouseover", "touchstart"].forEach(event => {
+["mouseover", "touchstart"].forEach((event) => {
   if (picContainer) {
-    picContainer.addEventListener(event, e => {
+    picContainer.addEventListener(event, (e) => {
       const target = e.target.closest("img");
       if (!target) return;
       const id = target.id.slice(3);
@@ -156,17 +205,17 @@ let picActive = 1;
   }
 });
 
-// change active image
+// Change active image
 const changeImage = (imgSrc, n) => {
-  // change the main image
+  // Change the main image
   pic.src = imgSrc;
-  // change the background-image
+  // Change the background-image
   zoom.style.backgroundImage = `url(${imgSrc})`;
-  //   remove the border from the previous active side image
+  // Remove the border from the previous active side image
   picList[picActive - 1].classList.remove("img-active");
-  // add to the active image
+  // Add to the active image
   picList[n - 1].classList.add("img-active");
-  //   update the active side picture
+  // Update the active side picture
   picActive = n;
 };
 
@@ -174,26 +223,25 @@ const changeImage = (imgSrc, n) => {
 =============
 Product Details Bottom
 =============
- */
-
+*/
 const btns = document.querySelectorAll(".detail-btn");
 const detail = document.querySelector(".product-detail__bottom");
 const contents = document.querySelectorAll(".content");
 
 if (detail) {
-  detail.addEventListener("click", e => {
+  detail.addEventListener("click", (e) => {
     const target = e.target.closest(".detail-btn");
     if (!target) return;
 
     const id = target.dataset.id;
     if (id) {
-      Array.from(btns).forEach(btn => {
-        // remove active from all btn
+      Array.from(btns).forEach((btn) => {
+        // Remove active from all btn
         btn.classList.remove("active");
         e.target.closest(".detail-btn").classList.add("active");
       });
-      // hide other active
-      Array.from(contents).forEach(content => {
+      // Hide other active
+      Array.from(contents).forEach((content) => {
         content.classList.remove("active");
       });
       const element = document.getElementById(id);
