@@ -19,6 +19,7 @@
 
     <!-- Custom StyleSheet -->
     <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="/js/cart.js" defer></script>
 
     <title>Phone Shop</title>
 </head>
@@ -72,11 +73,7 @@
                             </svg>
                         </a>
 
-                        <a href="#" class="icon__item">
-                            <svg class="icon__search">
-                                <use xlink:href="./images/sprite.svg#icon-search"></use>
-                            </svg>
-                        </a>
+                        
 
                         <a href="cart.html" class="icon__item">
                             <svg class="icon__cart">
@@ -326,7 +323,7 @@
                             <ul>
                                 <li>
                                     Subtotal
-                                    <span class="new__price">$2850.00</span>
+                                    <span id="subtotal-price" class="new__price">$0.00</span>
                                 </li>
                                 <li>
                                     Shipping
@@ -334,11 +331,12 @@
                                 </li>
                                 <li>
                                     Total
-                                    <span class="new__price">$4500.00</span>
+                                    <span id="total-price" class="new__price">$0.00</span>
                                 </li>
                             </ul>
-                            <a href="">PROCEED TO CHECKOUT</a>
+                            <a href="#" id="checkout-button">PROCEED TO CHECKOUT</a>
                         </div>
+                        
                     </form>
                 </div>
             </div>

@@ -1,7 +1,7 @@
-// Import Firebase modules
+// Import Firebase modules 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-analytics.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -16,47 +16,81 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app); // Initialize authentication
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// ✅ Ensure the form exists before adding event listeners
+document.addEventListener("DOMContentLoaded", () => {
+    const registerForm = document.getElementById("register-form");
+    const loginForm = document.querySelector(".login-form");
+
+    if (registerForm) {
+        registerForm.addEventListener("submit", handleSignup);
+    }
+    if (loginForm) {
+        loginForm.addEventListener("submit", handleLogin);
+    }
+});
 
 // ✅ Handle Signup Form
-document.getElementById("register-form").addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent form submission
+async function handleSignup(event) {
+    event.preventDefault(); // Prevent form from submitting normally
 
     // Get input values
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const name = document.getElementById("name")?.value.trim(); // Add name input field in HTML if needed
 
-    // Firebase Signup
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            alert("Signup successful! ✅");
-            console.log("User signed up:", userCredential.user);
-            window.location.href = "index.html"; // Redirect to index.html after signup
-        })
-        .catch((error) => {
-            alert("Signup failed ❌: " + error.message);
-            console.error("Error:", error);
+    // Check if fields are empty
+    if (!email || !password) {
+        alert("Please enter both email and password!");
+        return;
+    }
+
+    try {
+        // Firebase Signup
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        // Save user details to Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            name: name || "User",
+            email: user.email,
+            phone: "",
+            profileImage: "default-avatar.png" // Default profile image
         });
-});
+
+        alert("Signup successful! ✅");
+        console.log("User signed up:", user);
+        window.location.href = "index.html"; // Redirect to homepage after signup
+    } catch (error) {
+        alert("Signup failed ❌: " + error.message);
+        console.error("Error:", error);
+    }
+}
 
 // ✅ Handle Login Form
-document.querySelector(".login-form").addEventListener("submit", (event) => {
-    event.preventDefault(); // Prevent form submission
+async function handleLogin(event) {
+    event.preventDefault();
 
     // Get input values
-    const email = document.querySelector(".login-form input[placeholder='Email']").value;
-    const password = document.querySelector(".login-form input[placeholder='Password']").value;
+    const email = document.querySelector(".login-form input[placeholder='Email']").value.trim();
+    const password = document.querySelector(".login-form input[placeholder='Password']").value.trim();
 
-    // Firebase Login
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            alert("Login successful! ✅");
-            console.log("User logged in:", userCredential.user);
-            window.location.href = "index.html"; // Redirect to index.html after login
-        })
-        .catch((error) => {
-            alert("Login failed ❌: " + error.message);
-            console.error("Error:", error);
-        });
-});
+    // Check if fields are empty
+    if (!email || !password) {
+        alert("Please enter both email and password!");
+        return;
+    }
+
+    try {
+        // Firebase Login
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        alert("Login successful! ✅");
+        console.log("User logged in:", userCredential.user);
+        window.location.href = "index.html"; // Redirect after login
+    } catch (error) {
+        alert("Login failed ❌: " + error.message);
+        console.error("Error:", error);
+    }
+}
